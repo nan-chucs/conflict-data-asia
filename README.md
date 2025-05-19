@@ -46,7 +46,7 @@ Some parts of the original project weren’t saved, but here’s what remains:
 
 ## Screenshot
 
-![Power BI Report](visuals/report_screenshot.png)
+![Power BI Report screenshot.png]
 
 This is just a static summary — most of the interactivity is in Power BI.
 
