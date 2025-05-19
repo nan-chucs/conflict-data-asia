@@ -1,0 +1,33 @@
+-- 1️⃣ Add Latitude and Longitude Columns
+ALTER TABLE geolocation
+ADD COLUMN latitude DOUBLE PRECISION,
+ADD COLUMN longitude DOUBLE PRECISION;
+
+-- 2️⃣ Populate Latitude and Longitude from POINT Column
+UPDATE geolocation
+SET
+  longitude = location[0],  -- x = longitude
+  latitude = location[1];   -- y = latitude
+
+-- 3️⃣ Drop Foreign Keys on `geolocation` (EXCEPT `event_id`)
+DO $$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN
+        SELECT tc.constraint_name
+        FROM information_schema.table_constraints tc
+        JOIN information_schema.key_column_usage kcu
+          ON tc.constraint_name = kcu.constraint_name
+        WHERE tc.table_name = 'geolocation'
+          AND tc.constraint_type = 'FOREIGN KEY'
+          AND kcu.column_name != 'event_id'
+    LOOP
+        EXECUTE format('ALTER TABLE geolocation DROP CONSTRAINT %I', r.constraint_name);
+    END LOOP;
+END $$;
+
+-- 4️⃣ Drop Unneeded Columns: `country_id`, `war_id`
+ALTER TABLE geolocation
+DROP COLUMN country_id,
+DROP COLUMN war_id;

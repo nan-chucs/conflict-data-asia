@@ -1,0 +1,12 @@
+-- Update country_id based on war_participants (assuming war_participants table exists)
+UPDATE geolocation g
+SET country_id = wp.country_id
+FROM events e
+JOIN war_participants wp ON e.war_id = wp.war_id
+WHERE g.event_id = e.event_id;
+
+-- Update war_id from events table
+UPDATE geolocation g
+SET war_id = e.war_id
+FROM events e
+WHERE g.event_id = e.event_id;

@@ -1,0 +1,39 @@
+-- Countries table example
+CREATE TABLE countries (
+    country_id INT PRIMARY KEY,
+    country VARCHAR(255),
+    region VARCHAR(100)
+);
+
+-- Wars table
+CREATE TABLE wars (
+    war_id INT PRIMARY KEY,
+    country VARCHAR(255),
+    start_date DATE,
+    end_date DATE,
+    type_of_violence VARCHAR(100),
+    source_office TEXT
+);
+
+-- Events table
+CREATE TABLE events (
+    event_id INT PRIMARY KEY,
+    war_id INT,
+    date_start DATE,
+    country VARCHAR(255),
+    type_of_violence VARCHAR(100),
+    best INT,  -- fatalities
+    source_article TEXT,
+    FOREIGN KEY (war_id) REFERENCES wars(war_id)
+);
+
+-- Geolocation table
+CREATE TABLE geolocation (
+    event_id INT PRIMARY KEY,
+    location POINT,
+    country_id INT,
+    war_id INT,
+    CONSTRAINT fk_event FOREIGN KEY (event_id) REFERENCES events(event_id),
+    CONSTRAINT fk_country FOREIGN KEY (country_id) REFERENCES countries(country_id),
+    CONSTRAINT fk_war FOREIGN KEY (war_id) REFERENCES wars(war_id)
+);
